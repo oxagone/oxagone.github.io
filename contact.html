@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — Proxima</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #7C6FE0;
+      --purple-light: #B4AAFF;
+      --bg: #07070f;
+      --bg2: #0c0c1b;
+      --bg3: #111122;
+      --text: #eeeef8;
+      --muted: #7777a8;
+      --border: rgba(124,111,224,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 6vw;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,7,15,0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--purple-light); }
+
+    nav a.back {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    nav a.back:hover { color: var(--text); }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 6vw;
+    }
+
+    .contact-wrap {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* HEADER */
+    .contact-header {
+      margin-bottom: 2.8rem;
+    }
+
+    .contact-header h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .contact-header h1 em {
+      font-style: normal;
+      color: var(--purple-light);
+    }
+
+    .email-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(124,111,224,0.1);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 0.45rem 1rem;
+      font-size: 0.9rem;
+      color: var(--purple-light);
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .email-pill:hover {
+      background: rgba(124,111,224,0.18);
+      border-color: rgba(124,111,224,0.4);
+    }
+
+    .email-pill svg { flex-shrink: 0; }
+
+    /* FORM */
+    .form-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.4rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .field:last-of-type { margin-bottom: 0; }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input, textarea, select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(124,111,224,0.15);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237777a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      cursor: pointer;
+    }
+
+    select option { background: #0c0c1b; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.6rem 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background: #6a5ed4;
+      box-shadow: 0 4px 20px rgba(124,111,224,0.35);
+    }
+
+    .submit-btn:active { transform: scale(0.98); }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* CONFIRMATION */
+    .confirm-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      gap: 1rem;
+    }
+
+    .confirm-box.show { display: flex; }
+
+    .confirm-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(124,111,224,0.15);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .confirm-box h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .confirm-box p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      max-width: 300px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 500px) {
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">Proxima<span>.</span></a>
+    <a class="back" href="index.html">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to home
+    </a>
+  </nav>
+
+  <main>
+    <div class="contact-wrap">
+
+      <div class="contact-header">
+        <h1>Get in <em>touch</em></h1>
+        <p style="color:var(--muted);font-size:0.93rem;margin-bottom:1.1rem;line-height:1.6;">
+          Questions, partnerships, or just want to say hi — we read everything.
+        </p>
+        <a class="email-pill" href="/cdn-cgi/l/email-protection#6605090812070512260103121614091e0f0b07480507">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="__cf_email__" data-cfemail="2e4d41405a4f4d5a6e494b5a5e5c415647434f004d4f"><span class="__cf_email__" data-cfemail="7a1915140e1b190e3a1d1f0e0a08150213171b54191b">contact@getproxima.ca</span></span>
+        </a>
+      </div>
+
+      <div class="form-card" id="formCard">
+
+        <!-- FORM -->
+        <form id="contactForm" action="https://formspree.io/f/xkoqwwnz" method="POST" novalidate>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" name="firstName" placeholder="Jane" required />
+            </div>
+            <div class="field">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" name="lastName" placeholder="Doe" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="jane@university.ca" required />
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="" disabled selected>Select a topic</option>
+              <option value="general">Just saying hi</option>
+              <option value="collab">Want to collaborate</option>
+              <option value="campus">Bring Proxima to my campus</option>
+              <option value="idea">I have an idea / feedback</option>
+              <option value="bug">Something's broken</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+
+          <div class="field" style="margin-bottom:0">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+          </div>
+
+          <div class="divider"></div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            Send Message
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+        </form>
+
+        <script>
+          document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var btn = document.getElementById('submitBtn');
+            var confirmBox = document.getElementById('confirmBox');
+            var confirmEmail = document.getElementById('confirmEmail');
+            if (!form.firstName.value || !form.email.value || !form.message.value) return;
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+            confirmEmail.textContent = form.email.value.trim();
+            fetch('https://formspree.io/f/xkoqwwnz', {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { 'Accept': 'application/json' }
+            }).then(function(res) {
+              if (res.ok) {
+                form.style.display = 'none';
+                confirmBox.classList.add('show');
+              } else {
+                btn.disabled = false;
+                btn.textContent = 'Send Message';
+                alert('Something went wrong, please try again.');
+              }
+            }).catch(function() {
+              btn.disabled = false;
+              btn.textContent = 'Send Message';
+              alert('Something went wrong, please try again.');
+            });
+          });
+        </script>
+
+        <!-- CONFIRMATION -->
+        <div class="confirm-box" id="confirmBox">
+          <div class="confirm-icon">
+            <svg width="24" height="24" fill="none" stroke="#B4AAFF" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2>Message sent!</h2>
+          <p>Thanks for reaching out. We'll get back to you at <strong id="confirmEmail" style="color:var(--purple-light)"></strong> soon.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2026 Proxima Technologies Inc. — Canada</footer>
+
+</body>
+</html>

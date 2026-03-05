@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Proxima — Meet People Around You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+
+
+.footer-logo {
+  height: 80px;
+}
+/* ───────────────────────────────── TOKENS */
+:root{
+  --p:#7C6FE0; --pl:#B4AAFF; --pdim:rgba(124,111,224,.16);
+  --bg:#07070f; --bg2:#0c0c1b; --bg3:#111122;
+  --sur:rgba(255,255,255,.04); --bdr:rgba(255,255,255,.08);
+  --txt:#eeeef8; --mut:#7777a8;
+  --ease:cubic-bezier(.22,.68,0,1.2);
+}
+
+/* ───────────────────────────────── RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+
+/* ───────────────────────────────── NAV */
+nav{
+  position:fixed;inset:0 0 auto;z-index:900;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:64px;
+  background:rgba(7,7,15,.82);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--bdr);
+  transition:background .3s;
+}
+.nav-logo img{height:150px;}
+.nav-links{display:flex;gap:30px;list-style:none;}
+.nav-links a{
+  font-family:'Sora',sans-serif;font-size:.85rem;font-weight:500;
+  color:var(--mut);letter-spacing:.025em;transition:color .2s;cursor:pointer;
+}
+.nav-links a:hover,.nav-links a.cur{color:var(--txt);}
+.nav-cta{
+  background:var(--p);color:#fff;border:none;cursor:pointer;
+  padding:9px 20px;border-radius:100px;
+  font-family:'Sora',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.03em;
+  transition:background .2s,box-shadow .2s,transform .15s;
+}
+.nav-cta:hover{background:var(--pl);box-shadow:0 8px 28px rgba(124,111,224,.38);transform:translateY(-1px);}
+.burger{display:none;flex-direction:column;gap:5px;border:none;background:none;cursor:pointer;padding:4px;}
+.burger span{width:22px;height:2px;background:var(--txt);border-radius:2px;transition:all .3s;display:block;}
+
+/* ───────────────────────────────── HERO */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;
+  padding:100px 5% 70px;
+  position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 80% at 75% 45%,rgba(124,111,224,.13) 0%,transparent 70%),
+    radial-gradient(ellipse 35% 45% at 5% 85%,rgba(124,111,224,.07) 0%,transparent 65%);
+}
+/* animated grid */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black 20%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black 20%,transparent 80%);
+}
+.hero-content{position:relative;z-index:1;}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,111,224,.12);border:1px solid rgba(124,111,224,.28);
+  border-radius:100px;padding:5px 14px;margin-bottom:22px;
+  font-size:.72rem;font-family:'Sora',sans-serif;color:var(--pl);letter-spacing:.07em;text-transform:uppercase;
+  opacity:0;animation:slideUp .6s var(--ease) .1s forwards;
+}
+.bdot{width:6px;height:6px;background:var(--p);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+h1{
+  font-family:'Sora',sans-serif;font-weight:800;
+  font-size:clamp(2.4rem,4.8vw,3.8rem);line-height:1.08;
+  letter-spacing:-.03em;margin-bottom:18px;
+  opacity:0;animation:slideUp .65s var(--ease) .2s forwards;
+}
+h1 em{font-style:normal;color:var(--pl);}
+.hero-sub{
+  color:var(--mut);font-size:1rem;line-height:1.78;max-width:430px;margin-bottom:34px;
+  opacity:0;animation:slideUp .65s var(--ease) .32s forwards;
+}
+.hero-btns{
+  display:flex;gap:12px;flex-wrap:wrap;
+  opacity:0;animation:slideUp .65s var(--ease) .44s forwards;
+}
+.btn-p{
+  background:var(--p);color:#fff;border:none;cursor:pointer;
+  padding:13px 26px;border-radius:100px;
+  font-family:'Sora',sans-serif;font-weight:600;font-size:.88rem;letter-spacing:.02em;
+  transition:background .2s,box-shadow .2s,transform .15s;
+}
+.btn-p:hover{background:var(--pl);transform:translateY(-2px);box-shadow:0 14px 38px rgba(124,111,224,.42);}
+.btn-g{
+  background:transparent;color:var(--txt);border:1px solid var(--bdr);cursor:pointer;
+  padding:13px 26px;border-radius:100px;
+  font-family:'Sora',sans-serif;font-weight:500;font-size:.88rem;
+  transition:border-color .2s,color .2s;
+}
+.btn-g:hover{border-color:var(--p);color:var(--pl);}
+
+/* phone stack */
+.phones{
+  position:relative;z-index:1;
+  display:flex;align-items:flex-end;justify-content:center;gap:14px;
+  opacity:0;animation:slideUp .7s var(--ease) .3s forwards;
+}
+.ph{
+  border-radius:34px;overflow:hidden;
+  box-shadow:0 50px 100px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.07);
+  transition:transform .4s var(--ease);
+}
+.ph:nth-child(1){width:195px;transform:rotate(-5deg) translateY(24px);}
+.ph:nth-child(2){width:208px;z-index:2;}
+.ph:nth-child(3){width:195px;transform:rotate(5deg) translateY(24px);}
+.ph:nth-child(1):hover{transform:rotate(-5deg) translateY(14px);}
+.ph:nth-child(2):hover{transform:translateY(-10px);}
+.ph:nth-child(3):hover{transform:rotate(5deg) translateY(14px);}
+.ph img{width:100%;}
+
+/* ───────────────────────────────── STATS */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+  background:var(--bg2);
+}
+.st{
+  padding:34px 16px;text-align:center;border-right:1px solid var(--bdr);
+  transition:background .2s;
+}
+.st:last-child{border-right:none;}
+.st:hover{background:var(--pdim);}
+.st-n{font-family:'Sora',sans-serif;font-size:2rem;font-weight:700;color:var(--pl);letter-spacing:-.03em;}
+.st-l{color:var(--mut);font-size:.78rem;margin-top:5px;}
+
+/* ───────────────────────────────── HOW */
+.how{background:var(--bg2);padding:90px 5%;}
+.sec-label{font-family:'Sora',sans-serif;font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--p);margin-bottom:10px;}
+.sec-title{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.7rem,3vw,2.5rem);letter-spacing:-.022em;margin-bottom:48px;}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--bdr);border-radius:20px;overflow:hidden;}
+.step{padding:30px 22px;background:var(--bg3);border-right:1px solid var(--bdr);transition:background .2s;}
+.step:last-child{border-right:none;}
+.step:hover{background:rgba(124,111,224,.07);}
+.step-n{font-family:'Sora',sans-serif;font-size:.7rem;color:var(--p);font-weight:600;letter-spacing:.1em;margin-bottom:12px;}
+.step h3{font-family:'Sora',sans-serif;font-weight:600;font-size:.95rem;margin-bottom:8px;}
+.step p{color:var(--mut);font-size:.83rem;line-height:1.65;}
+
+/* ───────────────────────────────── USE CASES */
+.uses{padding:90px 5%;}
+.uses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+.uc{
+  background:var(--sur);border:1px solid var(--bdr);border-radius:18px;
+  padding:26px 22px;transition:border-color .25s,transform .25s;
+}
+.uc:hover{border-color:rgba(124,111,224,.38);transform:translateY(-3px);}
+.uc-icon{font-size:1.8rem;margin-bottom:12px;}
+.uc h3{font-family:'Sora',sans-serif;font-weight:600;font-size:.92rem;margin-bottom:7px;}
+.uc p{color:var(--mut);font-size:.82rem;line-height:1.62;}
+
+/* ───────────────────────────────── FEATURES */
+.feats{background:var(--bg2);padding:90px 5%;}
+.feats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+.fc{
+  background:var(--sur);border:1px solid var(--bdr);border-radius:18px;
+  padding:26px 22px;transition:border-color .25s,transform .25s;
+}
+.fc:hover{border-color:rgba(124,111,224,.38);transform:translateY(-3px);}
+.fc-icon{font-size:1.6rem;margin-bottom:12px;}
+.fc h3{font-family:'Sora',sans-serif;font-weight:600;font-size:.92rem;margin-bottom:7px;}
+.fc p{color:var(--mut);font-size:.82rem;line-height:1.62;}
+
+/* ───────────────────────────────── SCREENS */
+.screens{padding:80px 5%;overflow:hidden;}
+.scr-track{
+  display:flex;gap:18px;padding-bottom:14px;
+  justify-content:center;flex-wrap:wrap;
+}
+.scr-track::-webkit-scrollbar{display:none;}
+.scr-item{flex:0 0 auto;width:195px;scroll-snap-align:start;}
+.scr-item img{
+  width:100%;border-radius:26px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05);
+  transition:transform .3s;
+}
+.scr-item:hover img{transform:translateY(-7px);}
+.scr-label{text-align:center;margin-top:10px;font-size:.76rem;color:var(--mut);font-family:'Sora',sans-serif;}
+
+/* ───────────────────────────────── NEWSLETTER */
+.nl-section{background:var(--bg2);padding:90px 5%;}
+.nl-inner{
+  max-width:1000px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+}
+.nl-copy h2{font-family:'Sora',sans-serif;font-weight:700;font-size:clamp(1.6rem,2.8vw,2.2rem);letter-spacing:-.022em;margin-bottom:14px;}
+.nl-copy p{color:var(--mut);line-height:1.75;font-size:.92rem;max-width:380px;}
+.nl-perks{margin-top:28px;display:flex;flex-direction:column;gap:12px;}
+.nl-perk{display:flex;gap:11px;align-items:flex-start;}
+.nl-perk-arrow{color:var(--p);font-size:1rem;margin-top:1px;flex-shrink:0;}
+.nl-perk strong{font-family:'Sora',sans-serif;font-size:.88rem;display:block;margin-bottom:2px;}
+.nl-perk span{color:var(--mut);font-size:.82rem;}
+
+.nl-form-wrap{
+  background:var(--bg3);border:1px solid var(--bdr);
+  border-radius:22px;padding:36px 32px;
+}
+.nl-form-wrap h3{
+  font-family:'Sora',sans-serif;font-weight:600;font-size:1rem;
+  margin-bottom:22px;color:var(--txt);
+}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.fg label{font-size:.7rem;color:var(--mut);font-family:'Sora',sans-serif;letter-spacing:.07em;text-transform:uppercase;}
+.fg input,.fg select{
+  background:rgba(255,255,255,.04);border:1px solid var(--bdr);
+  color:var(--txt);border-radius:11px;padding:11px 14px;
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.fg input:focus,.fg select:focus{border-color:rgba(124,111,224,.5);}
+.fg select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%237777a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;
+  padding-right:34px;cursor:pointer;
+}
+.fg select option{background:#1a1a2e;}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.nl-submit{
+  width:100%;background:var(--p);color:#fff;border:none;cursor:pointer;
+  padding:13px;border-radius:100px;margin-top:6px;
+  font-family:'Sora',sans-serif;font-weight:600;font-size:.88rem;letter-spacing:.02em;
+  transition:background .2s,box-shadow .2s,transform .15s;
+}
+.nl-submit:hover{background:var(--pl);box-shadow:0 10px 30px rgba(124,111,224,.38);transform:translateY(-1px);}
+.nl-success{
+  display:none;text-align:center;padding:30px 10px;
+}
+.nl-success .check{font-size:2.6rem;margin-bottom:12px;}
+.nl-success h4{font-family:'Sora',sans-serif;font-weight:600;font-size:1.05rem;margin-bottom:8px;}
+.nl-success p{color:var(--mut);font-size:.86rem;}
+
+/* ───────────────────────────────── FOOTER */
+footer{
+  padding:32px 5%;border-top:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+}
+footer img{height:21px;opacity:.5;}
+footer p{color:var(--mut);font-size:.76rem;}
+
+/* ───────────────────────────────── SCROLL REVEAL */
+.reveal{opacity:1;transform:none;}
+.reveal.hidden{opacity:0;transform:translateY(28px);}
+.reveal.hidden.vis{opacity:1;transform:none;transition:opacity .65s ease,transform .65s ease;}
+.reveal-d1{transition-delay:.08s;}
+.reveal-d2{transition-delay:.16s;}
+.reveal-d3{transition-delay:.24s;}
+.reveal-d4{transition-delay:.32s;}
+
+/* ───────────────────────────────── ANIMATIONS */
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ───────────────────────────────── RESPONSIVE */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:90px;}
+  .ph:nth-child(1),.ph:nth-child(3){display:none;}
+  .ph:nth-child(2){transform:none;}
+  .steps{grid-template-columns:1fr 1fr;}
+  .step{border-bottom:1px solid var(--bdr);}
+  .uses-grid,.feats-grid{grid-template-columns:1fr 1fr;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .st{border-bottom:1px solid var(--bdr);}
+  .nl-inner{grid-template-columns:1fr;gap:36px;}
+}
+@media(max-width:600px){
+  .nav-links{
+    display:none;position:fixed;top:64px;left:0;right:0;
+    background:var(--bg2);flex-direction:column;
+    padding:20px 5%;border-bottom:1px solid var(--bdr);gap:18px;
+  }
+  .nav-links.open{display:flex;}
+  .burger{display:flex;}
+  .nav-cta{display:none;}
+  .steps{grid-template-columns:1fr;}
+  .uses-grid,.feats-grid{grid-template-columns:1fr;}
+  .fg-row{grid-template-columns:1fr;}
+  .nl-form-wrap{padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><img src="HeaderLogo.png" alt="Proxima"/></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="cur">Home</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="join.html">Join the Team</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Pre-Register →</button>
+  <button class="burger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="badge"><div class="bdot"></div>Now in Early Access</div>
+
+    <h1>You've already walked past <em>your next match today</em></h1>
+    <p class="hero-sub">Proxima finds people around you — in your lecture hall, coffee shop, library, or campus event — and lets you connect when the feeling is mutual. No strangers from across the city. Just the people already in your world.</p>
+    <div class="hero-btns">
+      <button class="btn-p" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Pre-Register for Campus Events</button>
+      <button class="btn-g" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    </div>
+  </div>
+  <div class="phones">
+    <div class="ph"><img src="Likes_Website.png" alt="Radar view"/></div>
+    <div class="ph"><img src="Explore_Website.png" alt="Explore"/></div>
+    <div class="ph"><img src="Messages_Website.png" alt="Messages"/></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="st reveal"><div class="st-n">Nearby</div><div class="st-l">Only people around you</div></div>
+  <div class="st reveal reveal-d1"><div class="st-n">Mutual</div><div class="st-l">Match only when both like</div></div>
+  <div class="st reveal reveal-d2"><div class="st-n">Blurred</div><div class="st-l">Profile hidden until matched</div></div>
+  <div class="st reveal reveal-d3"><div class="st-n">E2E</div><div class="st-l">Encrypted communication</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="sec-label reveal">How It Works</div>
+  <div class="sec-title reveal">From nearby to connected</div>
+  <div class="steps">
+    <div class="step reveal"><div class="step-n">01</div><h3>Find People Around You</h3><p>Open Proxima and instantly see who's nearby — in your class, café, gym, or event. Real people, right around you, right now.</p></div>
+    <div class="step reveal reveal-d1"><div class="step-n">02</div><h3>Like or Get Liked</h3><p>Browse nearby profiles and like the ones that catch your eye. Others can like you too — all quietly, with no pressure.</p></div>
+    <div class="step reveal reveal-d2"><div class="step-n">03</div><h3>Appear on Their Radar</h3><p>Once you like someone, your blurred profile appears on their radar. They'll know someone nearby is interested — without knowing who, until they like back.</p></div>
+    <div class="step reveal reveal-d3"><div class="step-n">04</div><h3>Match & Meet</h3><p>When they like you back, it's a match. They're already in the room — say hi in real life and let it happen naturally.</p></div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="uses">
+  <div class="sec-label reveal">Where It Works</div>
+  <div class="sec-title reveal">Built for real-life moments</div>
+  <div class="uses-grid">
+    <div class="uc reveal"><div class="uc-icon">🎓</div><h3>Lecture Halls & Classes</h3><p>That person you keep seeing in class? Proxima lets you connect without the awkward cold approach.</p></div>
+    <div class="uc reveal reveal-d1"><div class="uc-icon">☕</div><h3>Coffee Shops</h3><p>Someone catches your eye at the café? Discover if the feeling is mutual — quietly, without disrupting their day.</p></div>
+    <div class="uc reveal reveal-d2"><div class="uc-icon">🎉</div><h3>Campus Events & Clubs</h3><p>At a party or student event? Proxima turns any room into a space where real connections can spark naturally.</p></div>
+    <div class="uc reveal reveal-d1"><div class="uc-icon">📚</div><h3>Libraries & Study Spaces</h3><p>See the same face in the library regularly? Now you can know if they're interested too — no awkward interruption needed.</p></div>
+    <div class="uc reveal reveal-d2"><div class="uc-icon">🏋️</div><h3>Gyms & Recreation</h3><p>See familiar faces at the campus gym every week? Connect on your own terms, at your own pace.</p></div>
+    <div class="uc reveal reveal-d3"><div class="uc-icon">🎬</div><h3>Movie Nights & Events</h3><p>Our campus movie nights are designed specifically for Proxima. Everyone in the room has the app — perfect first connections.</p></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="feats">
+  <div class="sec-label reveal">Why Proxima</div>
+  <div class="sec-title reveal">Built different, by design</div>
+  <div class="feats-grid">
+    <div class="fc reveal"><div class="fc-icon">📍</div><h3>People Around You Only</h3><p>You only see people physically near you right now — in your building, your café, your event. Not strangers from across the city.</p></div>
+    <div class="fc reveal reveal-d1"><div class="fc-icon">🫧</div><h3>Blurred Until Matched</h3><p>Your profile stays blurred on someone's radar until they like you back. Mutual interest only — no one-sided exposure.</p></div>
+    <div class="fc reveal reveal-d2"><div class="fc-icon">🔒</div><h3>Encrypted Connection</h3><p>All communication between matched users is end-to-end encrypted. Your conversations stay between you and your match — nobody else.</p></div>
+    <div class="fc reveal reveal-d1"><div class="fc-icon">💬</div><h3>Minimal Chat by Design</h3><p>Message limits push you toward real-life interaction instead of getting stuck talking online forever.</p></div>
+    <div class="fc reveal reveal-d2"><div class="fc-icon">🎯</div><h3>Mutual Interest Only</h3><p>Nobody knows you liked them until they like you back. No awkward one-sided notifications, no pressure on either side.</p></div>
+    <div class="fc reveal reveal-d3"><div class="fc-icon">⚡</div><h3>No Pay-to-Win</h3><p>No boosted profiles or subscription tiers that hide your likes. Just the people around you, shown fairly — nothing hidden.</p></div>
+  </div>
+</section>
+
+<!-- APP SCREENS -->
+<section class="screens">
+  <div class="sec-label reveal">The App</div>
+  <div class="sec-title reveal">Clean, intentional design</div>
+  <div class="scr-track">
+    <div class="scr-item reveal"><img src="Explore_Website.png" alt="Explore"/><div class="scr-label">Explore</div></div>
+    <div class="scr-item reveal reveal-d1"><img src="Likes_Website.png" alt="My Likes"/><div class="scr-label">My Likes</div></div>
+    <div class="scr-item reveal reveal-d2"><img src="Messages_Website.png" alt="Messages"/><div class="scr-label">Messages</div></div>
+    <div class="scr-item reveal reveal-d3"><img src="Profile_Website.png" alt="Profile"/><div class="scr-label">Profile</div></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER / PRE-REGISTER -->
+<section class="nl-section" id="newsletter">
+  <div class="nl-inner">
+    <div class="nl-copy reveal">
+      <div class="sec-label">Campus Launch</div>
+      <h2>Be the first to know about campus events</h2>
+      <p>Join our newsletter to get early access and stay updated on Proxima campus events launching at Western, McMaster, and TMU — starting with exclusive events designed to spark real connections.</p>
+      <div class="nl-perks">
+        <div class="nl-perk"><div class="nl-perk-arrow">→</div><div><strong>Early access</strong><span>First to try Proxima before public launch at your school</span></div></div>
+        <div class="nl-perk"><div class="nl-perk-arrow">→</div><div><strong>Event invites</strong><span>Get notified about campus events and mixers near you</span></div></div>
+        <div class="nl-perk"><div class="nl-perk-arrow">→</div><div><strong>Shape the product</strong><span>Early users get direct input into features and roadmap</span></div></div>
+      </div>
+    </div>
+    <div class="reveal reveal-d1">
+      <div class="nl-form-wrap">
+        <h3>Pre-register for campus events</h3>
+        <form id="nlForm" action="https://formspree.io/f/xkoqwwnz" method="POST">
+          <div class="fg-row">
+            <div class="fg"><label>First Name</label><input type="text" name="firstName" required placeholder="Alex"/></div>
+            <div class="fg"><label>Last Name</label><input type="text" name="lastName" required placeholder="Chen"/></div>
+          </div>
+          <div class="fg"><label>Student Email</label><input type="email" name="email" required placeholder="you@uwo.ca"/></div>
+          <div class="fg">
+            <label>University</label>
+            <select name="university" required>
+              <option value="" disabled selected>Select your university</option>
+              <option value="western">Western University (UWO)</option>
+              <option value="mcmaster">McMaster University</option>
+              <option value="tmu">Toronto Metropolitan University (TMU)</option>
+            </select>
+          </div>
+          <button type="submit" class="nl-submit">Join the Waitlist →</button>
+        </form>
+        <script>
+          document.getElementById('nlForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var btn = form.querySelector('.nl-submit');
+            btn.disabled = true;
+            btn.textContent = 'Submitting…';
+            fetch('https://formspree.io/f/xkoqwwnz', {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { 'Accept': 'application/json' }
+            }).then(function(res) {
+              if (res.ok) {
+                form.style.display = 'none';
+                document.getElementById('nlSuccess').style.display = 'flex';
+              } else {
+                btn.disabled = false;
+                btn.textContent = 'Join the Waitlist →';
+                alert('Something went wrong, please try again.');
+              }
+            }).catch(function() {
+              btn.disabled = false;
+              btn.textContent = 'Join the Waitlist →';
+              alert('Something went wrong, please try again.');
+            });
+          });
+        </script>
+        <div class="nl-success" id="nlSuccess">
+          <div class="check">🎉</div>
+          <h4>You're on the list!</h4>
+          <p>We'll reach out before the next event at your campus. See you there.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img class="footer-logo" src="HeaderLogo.png" alt="Proxima"/>
+  <p>© 2026 Proxima Technologies Inc. — Canada</p>
+  <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553d3039393a1532302125273a2d3c38347b3634"><span class="__cf_email__" data-cfemail="4a2925243e2b293e0a2d2f3e3a38253223272b64292b">contact@getproxima.ca</span></a></p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Scroll reveal — mark hidden first, then reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+revealEls.forEach(el => el.classList.add('hidden'));
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('vis'); en.target.classList.remove('hidden'); } });
+},{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
+revealEls.forEach(el=>obs.observe(el));
+// Fallback — show everything after 1s no matter what
+setTimeout(()=>{ revealEls.forEach(el=>{ el.classList.remove('hidden'); el.classList.add('vis'); }); }, 1000);
+
+// Counter animation for stats
+function animateCount(el, target, suffix=''){
+  let start=0, dur=1400, startTime=null;
+  const isNum = !isNaN(parseFloat(target));
+  if(!isNum){ el.textContent=target; return; }
+  const num = parseFloat(target);
+  function step(ts){
+    if(!startTime) startTime=ts;
+    const prog=Math.min((ts-startTime)/dur,1);
+    const ease=1-Math.pow(1-prog,3);
+    el.textContent = Math.round(ease*num) + suffix;
+    if(prog<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const statObs = new IntersectionObserver((entries) => {
+  entries.forEach((en) => {
+    if (en.isIntersecting) {
+      const n = en.target.querySelector('.st-n');
+      if (n && !n.dataset.animated) {
+        n.dataset.animated = '1';
+        const txt = n.textContent?.trim();
+
+        if (txt === '0') {
+          animateCount(n, 0);
+        } else if (txt === '~50m') {
+          setTimeout(() => (n.textContent = '~50m'), 400);
+        } else if (txt === 'BT+WiFi') {
+          console.log('Test');
+        }
+      }
+    }
+  });
+});
+
